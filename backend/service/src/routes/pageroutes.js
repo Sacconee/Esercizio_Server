@@ -1,21 +1,34 @@
-const express = require('express');
+//raccolgo qui tutte le routes delle pages, ossia i percorsi ut...
+//in altri termini tutti i get saranno raccolti qui
+
+const express = require("express");
 const router = express.Router();
-const path = require('path');
+const paths = require("../../config/paths");
+const path = require("path");
 
-router.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../../../../frontend/public/index.html'));
+// HOME
+router.get("/", (req, res) => {
+    res.sendFile(path.join(paths.PUBLIC, "index.html"));
 });
 
-router.get('/about', (req, res) => {
-    res.sendFile(path.join(__dirname, '../../../../frontend/public/about.html'));
+// LOGIN
+router.get("/login", (req, res) => {
+    res.sendFile(path.join(paths.PUBLIC, "login.html"));
 });
 
-router.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, '../../../../frontend/public/login.html'));
+// ABOUT
+router.get("/about", (req, res) => {
+    res.sendFile(path.join(paths.PUBLIC, "about.html"));
 });
 
-router.get('/weather', (req, res) => {
-    res.sendFile(path.join(__dirname, '../../../../frontend/public/weather.html'));
+// SIGNIN
+router.get("/signin", (req, res) => {
+    res.sendFile(path.join(paths.PUBLIC, "signin.html"));
+});
+
+// WEATHER
+router.get("/weather", (req, res) => {
+    res.sendFile(path.join(paths.PUBLIC, "weather.html"));
 });
 
 module.exports = router;
