@@ -1,0 +1,18 @@
+const path = require("path");
+
+// Directory ROOT del servizio
+const ROOT = path.join(__dirname, "..");
+const FRONTEND_PUBLIC = path.join(ROOT, "..", "..", "frontend", "public");
+// Percorsi principali
+module.exports = {
+  ROOT,
+  SRC: path.join(ROOT, "src"),
+  //PUBLIC: path.join(ROOT, "public"),
+  PUBLIC: FRONTEND_PUBLIC,
+  ROUTES: path.join(ROOT, "src", "routes"),
+  // Controllers
+  ROUTES_PAGEROUTES: path.join(ROOT, "src", "routes", "pageroutes.js"),
+  CONTROLLERS: path.join(ROOT, "src", "controllers"),
+  //UTILS
+
+};
