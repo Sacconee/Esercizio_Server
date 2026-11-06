@@ -11,11 +11,23 @@ const passport = require('../config/passport');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(session({
-    secret: 'your-secret-key',
+app.set("trust proxy", 1);
+
+app.use(
+  session({
+    secret: env.SESSION_SECRET, // non più hardcoded nel codice
     resave: false,
-    saveUninitialized: false
-}));
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true, // il JS del browser non può leggere il cookie
+      sameSite: "lax", // necessario per il ritorno da Google (navigazione top-lev...
+      secure: env.NODE_ENV === "production", // solo HTTPS in produzione
+      maxAge: 1000 * 60 * 60 * 8, // 8 ore
+    },
+    // NB: senza "store" usa MemoryStore, ok per sviluppo ma NON per produzione
+    // (si svuota a ogni riavvio e non scala su più istanze: usare Redis o simili)
+  })
+);
 app.use(passport.initialize());
 app.use(passport.session());
 
