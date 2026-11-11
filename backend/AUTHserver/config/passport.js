@@ -1,4 +1,5 @@
 const passport = require("passport");
+const env = process.env 
 // lo scopo della libreria è gestire l'autenticazione e mantenere l'identità dell'utente.
 // Permette di autenticarsi tramite account Google.
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
@@ -9,9 +10,9 @@ passport.use(
   new GoogleStrategy(
     {
       //dati ottenuti dal file .env
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:3001/google/callback",
+      clientID: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
+      callbackURL: env.FRONTEND_URL + "google/callback",
     },
     // Google restituisce i dati dell'utente autenticato.
     async (accessToken, refreshToken, profile, done) => {

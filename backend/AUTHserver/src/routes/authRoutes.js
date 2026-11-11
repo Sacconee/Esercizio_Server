@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('../../config/passport');
+const config = require('../../config/env');
 
 router.get(
   "/google",
@@ -12,7 +13,7 @@ router.get(
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    failureRedirect: '${env.FRONTEND_URL}',
+    failureRedirect: config.FRONTEND_URL,
   }),
   (req, res) => {
     const acceptsJson = req.headers.accept && req.headers.accept.includes("application/json");
@@ -21,7 +22,7 @@ router.get(
       return res.json(req.user);
     }
 
-    const redirectUrl = `${env.FRONTEND_URL}?googleUser=${encodeURIComponent(JSON.stringify(req.user))}`;
+    const redirectUrl = `${config.FRONTEND_URL}?googleUser=${encodeURIComponent(JSON.stringify(req.user))}`;
     return res.redirect(redirectUrl);
   }
 );
@@ -54,12 +55,9 @@ router.get("/logout", (req, res, next) => {
 
         req.session.destroy(() => {
             res.clearCookie("connect.sid");
-            res.redirect(env.FRONTEND_URL);
+            res.redirect(config.FRONTEND_URL);
         });
     });
 });
-module.exports = router;
 
-
-router 
 module.exports = router;

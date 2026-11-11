@@ -15,13 +15,13 @@ app.set("trust proxy", 1);
 
 app.use(
   session({
-    secret: env.SESSION_SECRET, // non più hardcoded nel codice
+    secret: config.SESSION_SECRET, // non più hardcoded nel codice
     resave: false,
     saveUninitialized: false,
     cookie: {
       httpOnly: true, // il JS del browser non può leggere il cookie
       sameSite: "lax", // necessario per il ritorno da Google (navigazione top-lev...
-      secure: env.NODE_ENV === "production", // solo HTTPS in produzione
+      secure: config.NODE_ENV === "production", // solo HTTPS in produzione
       maxAge: 1000 * 60 * 60 * 8, // 8 ore
     },
     // NB: senza "store" usa MemoryStore, ok per sviluppo ma NON per produzione
