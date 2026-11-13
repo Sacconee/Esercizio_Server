@@ -12,7 +12,7 @@ passport.use(
       //dati ottenuti dal file .env
       clientID: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
-      callbackURL: env.FRONTEND_URL + "google/callback",
+      callbackURL: `${env.AUTH_BASE_URL || 'http://localhost:3500'}/google/callback`,
     },
     // Google restituisce i dati dell'utente autenticato.
     async (accessToken, refreshToken, profile, done) => {

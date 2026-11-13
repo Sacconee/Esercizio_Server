@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sign In</title>
+    <link rel="stylesheet" href="css/signin.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/footer.css">
+</head>
+
+<body>
+    <div id="navbar"></div>
+
+    <script>
+        fetch("components/navbar.html")
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById("navbar").innerHTML = html;
+                if (window.initializeNavbar) {
+                    window.initializeNavbar();
+                }
+            });
+    </script>
+    <script src="JS/navbar.js"></script>
+
+    <main class="signin-box">
+        <h2>Registrati</h2>
+        <form action="/api/v1/auth/login" method="POST">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Registrati</button>
+        </form>
+    </main>
+
+    <div id="footer"></div>
+
+    <script>
+        fetch("components/footer.html")
+            .then(res => res.text())
+            .then(html => document.getElementById("footer").innerHTML = html);
+    </script>
+</body>
+
+</html>

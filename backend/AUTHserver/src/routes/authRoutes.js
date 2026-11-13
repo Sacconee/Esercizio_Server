@@ -3,6 +3,28 @@ const router = express.Router();
 const passport = require('../../config/passport');
 const config = require('../../config/env');
 
+router.post("/login", (req, res, next) => {
+  const { username, password } = req.body || {};
+
+  if (!username || !password) {
+    return res.status(400).json({ error: "Username e password obbligatori" });
+  }
+
+  const user = {
+    googleId: `local-${username}`,
+    displayName: username,
+    firstName: username,
+    email: `${username}@local.dev`,
+  };
+
+  req.login(user, (err) => {
+    if (err) return next(err);
+
+    const redirectUrl = `${config.FRONTEND_URL}?localUser=${encodeURIComponent(JSON.stringify(user))}`;
+    return res.redirect(redirectUrl);
+  });
+});
+
 router.get(
   "/google",
   passport.authenticate("google", {

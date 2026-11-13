@@ -2,9 +2,10 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const paths = require('../config/paths');
+const config = require('../config/env');
 require('dotenv').config();
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = config.PORT || 3000;
 
 const pageRoutes = require(paths.ROUTES + '/pageroutes.js');
 
