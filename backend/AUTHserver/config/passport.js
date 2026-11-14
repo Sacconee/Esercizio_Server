@@ -1,39 +1,37 @@
 const passport = require("passport");
-const env = process.env 
-// lo scopo della libreria è gestire l'autenticazione e mantenere l'identità dell'utente.
-// Permette di autenticarsi tramite account Google.
+const config = require("./env");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
-// Registrazione della strategia Google in Passport
-passport.use(
-  //definisce la strategia, ossia quando l'utente si autentica
-  //passport costruisce l'user corrente, recuperando id, nome e email (dentro il try)
-  new GoogleStrategy(
-    {
-      //dati ottenuti dal file .env
-      clientID: env.GOOGLE_CLIENT_ID,
-      clientSecret: env.GOOGLE_CLIENT_SECRET,
-      callbackURL: `${env.AUTH_BASE_URL || 'http://localhost:3500'}/google/callback`,
-    },
-    // Google restituisce i dati dell'utente autenticato.
-    async (accessToken, refreshToken, profile, done) => {
-      //try {
-      const user = {
-        googleId: profile.id,
-        displayName: profile.displayName,
-        firstName:
-          profile.name?.givenName ||
-          profile.displayName?.split(" ")[0] ||
-          "utente",
-        email: profile.emails?.[0]?.value,
-      };
-      // Comunica a Passport che l'autenticazione è andata a buon fine e restituisco l'user
-      return done(null, user);
-      //} catch (err) {
-      return done(err, null);
-      //}
-    }
-  )
-);
+
+const googleClientId = config.GOOGLE_CLIENT_ID;
+const googleClientSecret = config.GOOGLE_CLIENT_SECRET;
+const googleConfigured = Boolean(googleClientId && googleClientSecret);
+
+if (googleConfigured) {
+  passport.use(
+    new GoogleStrategy(
+      {
+        clientID: googleClientId,
+        clientSecret: googleClientSecret,
+        callbackURL: `${config.AUTH_BASE_URL || "http://localhost:3500"}/google/callback`,
+      },
+      async (accessToken, refreshToken, profile, done) => {
+        const user = {
+          googleId: profile.id,
+          displayName: profile.displayName,
+          firstName:
+            profile.name?.givenName ||
+            profile.displayName?.split(" ")[0] ||
+            "utente",
+          email: profile.emails?.[0]?.value || "",
+        };
+
+        return done(null, user);
+      }
+    )
+  );
+} else {
+  console.warn("Google OAuth non configurato: avvio in modalità locale senza autenticazione Google.");
+}
 //quando l'utente si autentica express-session di express genera una sessione,
 //con il metodo serialize gli caccio dentro le info di user sopra
 passport.serializeUser((user, done) => {

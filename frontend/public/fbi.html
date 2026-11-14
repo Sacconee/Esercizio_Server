@@ -3,31 +3,21 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FBI Wanted</title>
 
-    <link rel="stylesheet" href="css/navbar.css">
-    <link rel="stylesheet" href="css/footer.css">
-    <link rel="stylesheet" href="css/weather.css">
-    <link rel="stylesheet" href="css/fbi.css">
+    <link rel="stylesheet" href="/api/v1/css/navbar.css">
+    <link rel="stylesheet" href="/api/v1/css/weather.css">
+    <link rel="stylesheet" href="/api/v1/css/fbi.css">
+    <link rel="stylesheet" href="/api/v1/css/footer.css">
 </head>
 
 <body>
 
     <!-- NAVBAR -->
     <div id="navbar"></div>
-    <script>
-        fetch("components/navbar.html")
-            .then(res => res.text())
-            .then(html => {
-                document.getElementById("navbar").innerHTML = html;
-                if (window.initializeNavbar) {
-                    window.initializeNavbar();
-                }
-            });
-    </script>
-    <script src="JS/navbar.js"></script>
 
-    <!-- WEATHER CONTENT -->
+    <!-- FBI CONTENT -->
     <main class="weather-wrapper fbi-wrapper">
         <section class="weather-box fbi-box">
             <h1>Scheda FBI del giorno</h1>
@@ -38,12 +28,10 @@
 
     <!-- FOOTER -->
     <div id="footer"></div>
-    <script>
-        fetch("components/footer.html")
-            .then(res => res.text())
-            .then(html => document.getElementById("footer").innerHTML = html);
-    </script>
-    <script src="js/fbi.js"></script>
+
+    <script src="/api/v1/JS/navbar.js"></script>
+    <script src="/api/v1/JS/footer.js"></script>
+    <script src="/api/v1/JS/fbi.js"></script>
 </body>
 
 </html>

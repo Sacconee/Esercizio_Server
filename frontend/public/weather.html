@@ -3,28 +3,18 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather API</title>
 
-    <link rel="stylesheet" href="css/navbar.css">
-    <link rel="stylesheet" href="css/footer.css">
-    <link rel="stylesheet" href="css/weather.css">
+    <link rel="stylesheet" href="/api/v1/css/navbar.css">
+    <link rel="stylesheet" href="/api/v1/css/weather.css">
+    <link rel="stylesheet" href="/api/v1/css/footer.css">
 </head>
 
 <body>
 
     <!-- NAVBAR -->
     <div id="navbar"></div>
-    <script>
-        fetch("components/navbar.html")
-            .then(res => res.text())
-            .then(html => {
-                document.getElementById("navbar").innerHTML = html;
-                if (window.initializeNavbar) {
-                    window.initializeNavbar();
-                }
-            });
-    </script>
-    <script src="JS/navbar.js"></script>
 
     <!-- WEATHER CONTENT -->
     <div class="weather-wrapper">
@@ -39,19 +29,16 @@
             </form>
         </div>
 
-
         <!-- RISULTATO METEO -->
         <div class="weather-box" id="weather-result"></div>
-        <!-- fine del dom-->
     </div>
+
     <!-- FOOTER -->
     <div id="footer"></div>
-    <script>
-        fetch("components/footer.html")
-            .then(res => res.text())
-            .then(html => document.getElementById("footer").innerHTML = html);
-    </script>
-    <script src="js/weather.js"></script>
+
+    <script src="/api/v1/JS/navbar.js"></script>
+    <script src="/api/v1/JS/footer.js"></script>
+    <script src="/api/v1/JS/weather.js"></script>
 </body>
 
 </html>

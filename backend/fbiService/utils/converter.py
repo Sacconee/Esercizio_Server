@@ -27,6 +27,6 @@ def safe_fbi_url(value):
     if not isinstance(value, str):
         return ""
     parsed = urlparse(value)
-    if parsed.scheme == "https" and parsed.hostname == "www.fbi.gov":
+    if parsed.scheme == "https" and parsed.hostname and (parsed.hostname == "fbi.gov" or parsed.hostname.endswith(".fbi.gov")):
         return value
     return ""

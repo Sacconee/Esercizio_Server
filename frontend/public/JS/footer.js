@@ -1,21 +1,31 @@
 async function loadFooter() {
-
-    const container = 
-        document.getElementById("footer");
-
+    const container = document.getElementById("footer");
     if (!container) return;
 
-    const html = 
-        await (
-            await fetch(
-                "/api/v1/components/footer.html"
-            )
-        ).text();
+    if (container.querySelector(".footer")) return;
 
-    container.innerHTML = html;
+    try {
+        let html = "";
+        try {
+            const res = await fetch("components/footer.html");
+            if (res.ok) html = await res.text();
+        } catch (_) {}
+
+        if (!html) {
+            const res = await fetch("/api/v1/components/footer.html");
+            if (res.ok) html = await res.text();
+        }
+
+        if (html) {
+            container.innerHTML = html;
+        }
+    } catch (err) {
+        console.error("Errore nel caricamento del footer:", err);
+    }
 }
 
-window.addEventListener(
-    "DOMContentLoaded",
-    loadFooter
-);
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", loadFooter);
+} else {
+    loadFooter();
+}

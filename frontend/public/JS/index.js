@@ -1,45 +1,113 @@
-async function loadWelcomeGif() {
-  try {
-    const response = await fetch("/api/v1/auth/me");
-
-    if (!response.ok) {
-      throw new Error(`HTTP error: ${response.status}`);
-    }
-
-    const user = await response.json();
-    console.log("Risposta API auth:", user); // Utile per verificare la risposta in F12
-
-    // Se la tua API restituisce i dati utente direttamente quando autenticato,
-    // adatta questa condizione (es. user && user.id oppure user.authenticated)
-    if (!user || user.authenticated === false) {
-      return;
-    }
-
+// Gestione homepage: Welcome GIF e visualizzazione JSON dati utente loggato
+async function setupHomePage() {
     const welcomeContent = document.getElementById("welcome-content");
+    const toggleBtn = document.getElementById("toggle-user-data-btn");
+    const userDataBox = document.getElementById("user-data-box");
+    const jsonCode = document.getElementById("user-data-json");
+    const heroTitle = document.getElementById("hero-title");
+    const copyBtn = document.getElementById("copy-json-btn");
 
-    if (!welcomeContent) {
-      return;
+    if (!welcomeContent) return;
+
+    // Se l'URL indica logout, svuota subito
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("logout") === "true") {
+        localStorage.removeItem("currentUser");
+        localStorage.removeItem("googleUser");
+        welcomeContent.style.display = "none";
+        if (heroTitle) heroTitle.textContent = "Benvenuto";
+        return;
     }
 
-    const box = document.createElement("div");
-    box.className = "welcome-box";
+    // Recupera l'utente loggato verificando con il backend
+    async function fetchLoggedUser() {
+        try {
+            const res = await fetch("/api/v1/auth/me", { cache: "no-store" });
+            if (res.ok) {
+                const data = await res.json();
+                if (data.authenticated) {
+                    const user = data.user || { firstName: data.firstName || "utente" };
+                    localStorage.setItem("currentUser", JSON.stringify(user));
+                    return user;
+                } else {
+                    // Backend dichiara non autenticato: ripulisce storage locale
+                    localStorage.removeItem("currentUser");
+                    localStorage.removeItem("googleUser");
+                    return null;
+                }
+            }
+        } catch (e) {
+            console.warn("Impossibile contattare l'endpoint /api/v1/auth/me:", e);
+        }
 
-    const img = document.createElement("img");
-    img.src = "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3cnYwMXUzd2FuenV4MWdoMzM2dWlsams0bTFkYXJ4Z2VoZjY1ZWd2YyZlcD12MV9naWZzX3RyZW5kaW5nJmN0PWc/rjkJD1v80CjYs/giphy.gif";
-    img.alt = "Welcome Gif";
+        // Se offline o backend irraggiungibile, controlla lo storage locale
+        try {
+            const stored = localStorage.getItem("currentUser") || localStorage.getItem("googleUser");
+            if (stored) {
+                return JSON.parse(stored);
+            }
+        } catch (_) {}
 
-    box.appendChild(img);
-    welcomeContent.appendChild(box);
-  } catch (err) {
-    console.error("Errore durante il caricamento della GIF:", err);
-  }
+        return null;
+    }
+
+    const currentUserData = await fetchLoggedUser();
+
+    if (!currentUserData) {
+        welcomeContent.style.display = "none";
+        if (heroTitle) heroTitle.textContent = "Benvenuto";
+        return;
+    }
+
+    // Se è loggato, mostra la welcome GIF
+    welcomeContent.style.display = "flex";
+
+    const displayName = currentUserData.firstName || currentUserData.displayName || "utente";
+    if (heroTitle) {
+        heroTitle.textContent = `Bentornato, ${displayName}!`;
+    }
+
+    // Prepara la visualizzazione del JSON con tutti i dati salvati
+    const formattedJson = JSON.stringify(currentUserData, null, 2);
+    if (jsonCode) {
+        jsonCode.textContent = formattedJson;
+    }
+
+    // Toggle per mostrare / nascondere la casella del JSON
+    if (toggleBtn && userDataBox) {
+        toggleBtn.onclick = () => {
+            const isHidden = userDataBox.style.display === "none" || !userDataBox.style.display;
+            if (isHidden) {
+                userDataBox.style.display = "block";
+                toggleBtn.textContent = "Nascondi dati utente (JSON)";
+                toggleBtn.classList.add("active");
+            } else {
+                userDataBox.style.display = "none";
+                toggleBtn.textContent = "Mostra dati utente (JSON)";
+                toggleBtn.classList.remove("active");
+            }
+        };
+    }
+
+    // Bottone copia negli appunti
+    if (copyBtn && jsonCode) {
+        copyBtn.onclick = async () => {
+            try {
+                await navigator.clipboard.writeText(formattedJson);
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = "Copiato!";
+                setTimeout(() => {
+                    copyBtn.textContent = originalText;
+                }, 2000);
+            } catch (err) {
+                console.warn("Errore durante la copia del JSON:", err);
+            }
+        };
+    }
 }
 
-// Esegue la funzione sia se il DOM è ancora in caricamento sia se è già pronto
 if (document.readyState === "loading") {
-  window.addEventListener("DOMContentLoaded", loadWelcomeGif);
+    document.addEventListener("DOMContentLoaded", setupHomePage);
 } else {
-  loadWelcomeGif();
+    setupHomePage();
 }
-
-

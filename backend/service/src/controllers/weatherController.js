@@ -16,8 +16,8 @@ exports.weatherController = async (req, res) => {
     try {
         const data = await getWeather(city, WEATHER_API_KEY);
 
-        if (data.cod !== 200) {
-            return res.json({ error: true, message: "Città non trovata" });
+        if (String(data.cod) !== "200") {
+            return res.json({ error: true, message: data.message || "Città non trovata" });
         }
 
         res.json(normalizeWeather(data));

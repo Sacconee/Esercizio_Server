@@ -1,10 +1,11 @@
 const { createProxyMiddleware } = require("http-proxy-middleware");
-const config = require("../config/env");
+const config = require("../env");
 
 module.exports = createProxyMiddleware({
   target: config.SERVER_URL,
   changeOrigin: true,
-  pathRewrite: {
-    "^/api/v1": ""
+  pathRewrite: (pathStr) => {
+    const rewritten = pathStr.replace(/^\/api\/v1/, "");
+    return rewritten === "" ? "/" : rewritten;
   }
 });

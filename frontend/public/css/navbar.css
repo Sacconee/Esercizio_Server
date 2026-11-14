@@ -25,6 +25,7 @@
     font-weight: bold;
     color: #333;
     letter-spacing: 0.5px;
+    text-decoration: none;
 }
 
 .nav-welcome {
@@ -39,7 +40,7 @@
 .nav-links {
     list-style: none;
     display: flex;
-    gap: 25px;
+    gap: 20px;
     margin-left: auto;
     align-items: center;
 }
@@ -48,14 +49,27 @@
     text-decoration: none;
     color: #0078ff;
     font-size: 16px;
-    padding: 6px 10px;
+    padding: 6px 12px;
     border-radius: 6px;
     transition: 0.25s ease;
+    display: inline-block;
 }
 
 .nav-links a:hover {
     background: #e8f1ff;
     color: #005fcc;
+}
+
+/* Logout button */
+.nav-links .nav-logout-btn {
+    color: #dc2626;
+    border: 1.5px solid #dc2626;
+    font-weight: 600;
+}
+
+.nav-links .nav-logout-btn:hover {
+    background: #dc2626;
+    color: #ffffff;
 }
 
 /* ===== MOBILE ===== */

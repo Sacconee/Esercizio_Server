@@ -1,5 +1,5 @@
 const { createProxyMiddleware } = require("http-proxy-middleware");
-const config = require("../config/env");
+const config = require("../env");
 
 module.exports = createProxyMiddleware({
   target: config.AUTH_SERVER_URL,

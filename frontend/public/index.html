@@ -3,43 +3,47 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
-    <link rel="stylesheet" href="css/index.css">
-    <link rel="stylesheet" href="css/navbar.css">
-    <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="/api/v1/css/navbar.css">
+    <link rel="stylesheet" href="/api/v1/css/index.css">
+    <link rel="stylesheet" href="/api/v1/css/footer.css">
 </head>
 
 <body>
     <div id="navbar"></div>
 
-    <script>
-        fetch("components/navbar.html")
-            .then(res => res.text())
-            .then(html => {
-                document.getElementById("navbar").innerHTML = html;
-                if (window.initializeNavbar) {
-                    window.initializeNavbar();
-                }
-            });
-    </script>
-    <script src="JS/navbar.js"></script>
-
-
     <!-- HERO SECTION -->
     <section class="hero">
-        <h1>Benvenuto</h1>
-        <p>Questa è la homepage del tuo progetto.</p>
+        <h1 id="hero-title">Benvenuto</h1>
+        <p id="hero-subtitle">Questa è la homepage del tuo progetto.</p>
+
+        <!-- Sezione mostrata SOLO quando l'utente è loggato -->
+        <div id="welcome-content" class="welcome-content" style="display: none;">
+            <div class="welcome-box">
+                <img id="welcome-gif" src="https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3cnYwMXUzd2FuenV4MWdoMzM2dWlsams0bTFkYXJ4Z2VoZjY1ZWd2YyZlcD12MV9naWZzX3RyZW5kaW5nJmN0PWc/rjkJD1v80CjYs/giphy.gif" alt="Welcome Gif">
+                
+                <button type="button" id="toggle-user-data-btn" class="user-data-btn">
+                    Mostra dati utente (JSON)
+                </button>
+
+                <div id="user-data-box" class="user-data-box" style="display: none;">
+                    <div class="user-data-header">
+                        <span>Dati Utente Salvati (JSON)</span>
+                        <button type="button" id="copy-json-btn" class="copy-json-btn" title="Copia JSON">Copia</button>
+                    </div>
+                    <pre><code id="user-data-json"></code></pre>
+                </div>
+            </div>
+        </div>
     </section>
 
     <!-- FOOTER -->
     <div id="footer"></div>
 
-    <script>
-        fetch("components/footer.html")
-            .then(res => res.text())
-            .then(html => document.getElementById("footer").innerHTML = html);
-    </script>
-
+    <script src="/api/v1/JS/navbar.js"></script>
+    <script src="/api/v1/JS/footer.js"></script>
+    <script src="/api/v1/JS/index.js"></script>
 </body>
 
 </html>

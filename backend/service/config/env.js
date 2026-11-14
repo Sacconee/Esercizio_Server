@@ -1,22 +1,14 @@
-// config/env.js
-// gestisce e valida le variabili d'ambiente --> sicurezza che e...
-require("dotenv").config();
+const path = require("path");
+require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 
-// Lista delle variabili obbligatorie
-const requiredVars = ["WEATHER_API_KEY", "PORT"];
+const PORT = parseInt(process.env.PORT, 10) || 3001;
+const WEATHER_API_KEY = process.env.WEATHER_API_KEY || "demo-weather-api-key";
 
-// Controllo che tutte le variabili siano presenti
-// per ogni key della lista sopra controlla che esistano
-// per evitare il problema dell'undefined su una key
-requiredVars.forEach(key => {
-  if (!process.env[key]) {
-    console.error(`La variabile ${key} non è definita nel file .env`);
-    process.exit(1); // blocca l'avvio del server
-  }
-});
+if (!process.env.WEATHER_API_KEY) {
+  console.warn("La variabile WEATHER_API_KEY non è definita nel file .env: uso un valore demo per lo sviluppo.");
+}
 
-// Esporto le variabili già validate
 module.exports = {
-  WEATHER_API_KEY: process.env.WEATHER_API_KEY,
-  PORT: parseInt(process.env.PORT, 10)
+  WEATHER_API_KEY,
+  PORT,
 };
