@@ -14,4 +14,6 @@ module.exports = {
     FRONTEND_URL: cleanVal(process.env.FRONTEND_URL) || 'http://localhost:4000/api/v1',
     AUTH_BASE_URL: cleanVal(process.env.AUTH_BASE_URL) || 'http://localhost:3500',
     SESSION_SECRET: cleanVal(process.env.SESSION_SECRET) || 'secret-key',
+    MONGODB_URI: cleanVal(process.env.MONGODB_URI),
+    MONGODB_DB_NAME: cleanVal(process.env.MONGODB_DB_NAME) || 'auth_db',
 };
